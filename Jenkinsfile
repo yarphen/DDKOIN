@@ -1,3 +1,4 @@
+/* 
 def initBuild() {
   sh '''#!/bin/bash
   pkill -f app.js -9 || true
@@ -435,5 +436,52 @@ lock(resource: "ddk-Core-Nodes", inversePrecedence: true) {
   stage ('Set milestone') {
     milestone 1
     currentBuild.result = 'SUCCESS'
+  }
+}
+*/
+
+pipeline {
+  environment {
+    REGISTRY_URL = "docker.registry.zeppel.in.ua"
+    TAG = ""
+  }
+  agent any
+  stages {
+    stage("Checkout") {
+       checkout scm
+    }
+    stage("Getting tag") {
+      steps{
+        script {
+          TAG = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+        }
+      }
+    }
+    stage("Building") {
+      steps{
+        script {
+          if (TAG) {
+            sh("echo 'Building current tag: $TAG'")
+            dockerImage = docker.build REGISTRY_URL + ":$TAG"
+          } else {
+            sh("Nothing to build: no tag")
+          }
+        }
+      }
+    }
+    stage("Pushing") {
+      steps{
+        script {
+          if (TAG) {
+            sh("echo 'Pushing current tag: $TAG'")
+            docker.withRegistry(REGISTRY_URL, "registry-cred") {
+              dockerImage.push()
+            }
+          } else {
+            sh("Nothing to push: no tag")
+          }
+        }
+      }
+    }
   }
 }
