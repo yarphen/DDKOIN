@@ -455,7 +455,7 @@ pipeline {
     stage("Getting tag") {
       steps{
         script {
-          TAG = sh(returnStdout: true, script: "cd $WORKSPACE && git tag --sort version:refname | tail -1").trim()
+          TAG = sh(returnStdout: true, script: "cd $WORKSPACE && git tag -l --points-at HEAD | tail -1").trim()
         }
       }
     }
