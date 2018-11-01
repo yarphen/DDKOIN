@@ -466,7 +466,7 @@ pipeline {
             sh("echo 'Building current tag: $TAG'")
             dockerImage = docker.build REGISTRY_URL + ":$TAG"
           } else {
-            sh("Nothing to build: no tag")
+            sh("echo 'Nothing to build: no tag'")
           }
         }
       }
@@ -480,7 +480,7 @@ pipeline {
               dockerImage.push()
             }
           } else {
-            sh("Nothing to push: no tag")
+            sh("echo 'Nothing to build: no tag'")
           }
         }
       }
