@@ -447,15 +447,6 @@ pipeline {
   }
   agent any
   stages {
-    stage("Checkout") {
-      steps {
-        checkout([
-          $class: 'GitSCM',
-          extensions: [[$class: 'LocalBranch', localBranch: "**"]],
-          submoduleCfg: [],
-        ])
-      }
-    }
     stage("Getting tag") {
       steps{
         script {
