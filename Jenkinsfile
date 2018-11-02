@@ -449,7 +449,11 @@ pipeline {
   stages {
     stage("Checkout") {
       steps {
-        checkout scm
+        checkout([
+          $class: 'GitSCM',
+          extensions: [[$class: 'LocalBranch', localBranch: "**"]],
+          submoduleCfg: [],
+        ])
       }
     }
     stage("Getting tag") {
