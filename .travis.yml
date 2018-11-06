@@ -1,0 +1,11 @@
+sudo: true
+dist: xenial
+jobs:
+  include:
+    - on: tags: true
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t "$DOCKER_USERNAME/core:latest" .
+      - docker push "$DOCKER_USERNAME/core:latest"
+
