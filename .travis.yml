@@ -1,0 +1,14 @@
+sudo: true
+dist: xenial
+language: node_js
+jobs:
+  include:
+    - stage: build docker image
+      if: tag IS present
+      before_install:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      install:
+      - docker build -t "$DOCKER_USERNAME/core:$TRAVIS_TAG" .
+      script:
+      - docker push "$DOCKER_USERNAME/core:$TRAVIS_TAG"
+
