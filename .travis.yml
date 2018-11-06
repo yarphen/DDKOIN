@@ -2,7 +2,8 @@ sudo: true
 dist: xenial
 jobs:
   include:
-    - on: tags: true
+    - on:
+      tags: true
     - stage: build docker image
       script:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
