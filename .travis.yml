@@ -7,6 +7,7 @@ jobs:
       if: tag IS present
       before_install:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - echo `git tag -l --points-at HEAD | tail -1`
       install:
       - docker build -t "$DOCKER_USERNAME/core:latest" .
       script:
