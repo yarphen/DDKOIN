@@ -439,7 +439,6 @@ lock(resource: "ddk-Core-Nodes", inversePrecedence: true) {
   }
 }
 */
-//dummy comment
 properties([pipelineTriggers([githubPush()])])
 
 pipeline {
