@@ -439,6 +439,8 @@ lock(resource: "ddk-Core-Nodes", inversePrecedence: true) {
   }
 }
 */
+properties([pipelineTriggers([githubPush()])])
+
 pipeline {
   environment {
     REGISTRY = credentials("registry-cred-dockerhub")
