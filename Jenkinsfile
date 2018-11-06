@@ -441,6 +441,7 @@ lock(resource: "ddk-Core-Nodes", inversePrecedence: true) {
 */
 pipeline {
   environment {
+    REGISTRY = credentials("registry-cred")
     REGISTRY_URL = "docker.registry.zeppel.in.ua"
     TAG = ""
   }
@@ -458,7 +459,7 @@ pipeline {
         script {
           if (TAG) {
             sh("echo 'Building current tag: $TAG'")
-            dockerImage = docker.build REGISTRY_URL + ":$TAG"
+            sh("cd $WORKSPACE && docker build -t $REGISTRY_URL/ddk/core:$TAG .")
           } else {
             sh("echo 'Nothing to build: no tag'")
           }
@@ -470,9 +471,8 @@ pipeline {
         script {
           if (TAG) {
             sh("echo 'Pushing current tag: $TAG'")
-            docker.withRegistry(REGISTRY_URL, "registry-cred") {
-              dockerImage.push()
-            }
+            sh("echo $REGISTRY_PSW | docker login --password-stdin --username $REGISTRY_USR $REGISTRY_URL")
+            sh("docker push $REGISTRY_URL/ddk/core:$TAG")
           } else {
             sh("echo 'Nothing to build: no tag'")
           }
