@@ -1,5 +1,7 @@
 sudo: true
 dist: xenial
+language: node_js
+
 jobs:
   include:
     - on:
