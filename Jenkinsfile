@@ -439,7 +439,6 @@ lock(resource: "ddk-Core-Nodes", inversePrecedence: true) {
   }
 }
 */
-// comment
 pipeline {
   environment {
     REGISTRY_URL = "docker.registry.zeppel.in.ua"
