@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/yarphen/DDKOIN.svg?branch=ci)](https://travis-ci.com/yarphen/DDKOIN)
+
 # ddk
 Describe brief description about ddk here
 
