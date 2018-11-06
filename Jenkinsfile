@@ -441,8 +441,7 @@ lock(resource: "ddk-Core-Nodes", inversePrecedence: true) {
 */
 pipeline {
   environment {
-    REGISTRY = credentials("registry-cred")
-    REGISTRY_URL = "docker.registry.zeppel.in.ua"
+    REGISTRY = credentials("registry-cred-dockerhub")
     TAG = ""
   }
   agent any
@@ -459,7 +458,7 @@ pipeline {
         script {
           if (TAG) {
             sh("echo 'Building current tag: $TAG'")
-            sh("cd $WORKSPACE && docker build -t $REGISTRY_URL/ddk/core:$TAG .")
+            sh("cd $WORKSPACE && docker build -t ddkoin/core:$TAG .")
           } else {
             sh("echo 'Nothing to build: no tag'")
           }
@@ -471,8 +470,8 @@ pipeline {
         script {
           if (TAG) {
             sh("echo 'Pushing current tag: $TAG'")
-            sh("echo $REGISTRY_PSW | docker login --password-stdin --username $REGISTRY_USR $REGISTRY_URL")
-            sh("docker push $REGISTRY_URL/ddk/core:$TAG")
+            sh("echo $REGISTRY_PSW | docker login --password-stdin --username $REGISTRY_USR")
+            sh("docker push ddkoin/core:$TAG")
           } else {
             sh("echo 'Nothing to build: no tag'")
           }
