@@ -1,14 +1,15 @@
 sudo: true
 dist: xenial
 language: node_js
-
 jobs:
   include:
-    - on:
-      tags: true
     - stage: build docker image
-      script:
+      on:
+        tags: true
+      before_install:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      install:
       - docker build -t "$DOCKER_USERNAME/core:latest" .
+      script:
       - docker push "$DOCKER_USERNAME/core:latest"
 
