@@ -5,14 +5,17 @@ jobs:
   include:
     - stage: build docker image
       if: tag IS present
+      install:
       script:
       - docker build -t "$DOCKER_USERNAME/core:$TRAVIS_TAG" .
     - stage: test docker image
       if: tag IS present
+      install:
       script:
       - docker run --entrypoint '' "$DOCKER_USERNAME/core:$TRAVIS_TAG" npm test
     - stage: push docker image
       if: tag IS present
+      install:
       script:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker build -t "$DOCKER_USERNAME/core:$TRAVIS_TAG" .
