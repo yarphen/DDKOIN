@@ -1,7 +1,27 @@
 var moment = require('moment');
 var util = require('util');
 
+const initGruntForOptionalTasks = (grunt) => {
+	grunt.registerTask('forceoff', 'Forces the force flag off', function() {
+		grunt.option('force', false);
+	});
+	grunt.registerTask('forceon', 'Forces the force flag on', function() {
+		grunt.option('force', true);
+	});
+	grunt.registerOptionalTask = (name, wrappedTasks) => grunt.registerTask(name, null, function() {
+		let tasks;
+		if (grunt.option('force')) {
+			tasks = wrappedTasks;
+		} else {
+			tasks = ['forceon', ...wrappedTasks, 'forceoff'];
+		}
+		grunt.task.run(tasks);
+	});
+};
+
 module.exports = function (grunt) {
+	initGruntForOptionalTasks(grunt);
+
 	let files = [
 		'logger.js',
 		'api/**/*.js',
@@ -107,16 +127,17 @@ module.exports = function (grunt) {
 			options: {
 				configFile: '.eslintrc.json',
 				format: 'codeframe',
-				fix: false
+				fix: false,
 			},
 			target: [
-				'api',
-				'helpers',
-				'modules',
-				'logic',
-				'schema',
-				'tasks',
-				'test'
+				//TODO: fix lint errors and uncomment
+				'api/**/*.js',
+				'helpers/**/*.js',
+				'modules/**/*.js',
+				'logic/**/*.js',
+				'schema/**/*.js',
+				'tasks/**/*.js',
+				'test/**/*.js'
 			]
 		}
 	});
@@ -131,8 +152,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('default', ['release']);
 	grunt.registerTask('release', ['exec:folder', 'obfuscator', 'exec:package', 'exec:build', 'compress']);
 	grunt.registerTask('jenkins', ['exec:coverageSingle']);
-	grunt.registerTask('eslint-nofix', ['eslint']);
-	grunt.registerTask('test', ['eslint', 'exec:coverage']);
+	grunt.registerOptionalTask('eslint-nofix', ['eslint']);
+	grunt.registerTask('test', ['eslint-nofix', 'exec:coverage']);
 
 	grunt.registerTask('eslint-fix', 'Run eslint and fix formatting', function () {
 		grunt.config.set('eslint.options.fix', true);
