@@ -11,3 +11,4 @@ public
 config.json
 genesisBlock.json
 .idea/
+.nyc_output
