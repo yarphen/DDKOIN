@@ -9,6 +9,7 @@ jobs:
       script:
       - |
         docker build -t "$DOCKER_USERNAME/core:$TRAVIS_TAG" . && \
+        docker run --entrypoint '' "$DOCKER_USERNAME/core:$TRAVIS_TAG" npm run eslint || echo 'Lint failure' && \
         docker run --entrypoint '' "$DOCKER_USERNAME/core:$TRAVIS_TAG" npm test && \
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && \
         docker push "$DOCKER_USERNAME/core:$TRAVIS_TAG"
